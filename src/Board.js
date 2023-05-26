@@ -79,11 +79,32 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      /////////////////////////////////////////////////////
+      //reduce the row to singular value
+        //if that value is greater than 1: you gotta problem bro, return true
+        //else return false
+
+      let potentialConflicts = rowIndex.reduce((acc, curr) => acc + curr);
+
+      return (potentialConflicts > 1 ? true : false);
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
+      //arguing each nested array to hasRowConflict
+        //if ER is true, return true
+
+
+      //relabel attributes for easier access
+      const rows = this.attributes;
+      //loop over all first N keys, arguing their values to hasRowConflictsAt
+      for (let i = 0; i < rows.n-1; i++) {
+        let index = i.toString();
+        if (this.hasRowConflictAt(rows[index])) return true;
+      }
+
+        //if true is returned, we can return true;
+        //otherswise return false
       return false; // fixme
     },
 
@@ -93,12 +114,24 @@
     // --------------------------------------------------------------
     //
     // test if a specific column on this board contains a conflict
-    hasColConflictAt: function(colIndex) {
-      return false; // fixme
+    hasColConflictAt: function(currentColumn) {
+      let potentialConflicts = currentColumn.reduce((acc, curr) => acc + curr);
+      return (potentialConflicts > 1 ? true : false);
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
+
+      for (let c = 0; c < this.attributes.n-1; c++) {
+        const column = [];
+
+        for (let r = 0; r < this.attributes.n-1; r++) {
+          column.push(this.attributes[r][c]);
+        }
+        if (this.hasColConflictAt(column)) return true;
+      }
+
+
       return false; // fixme
     },
 
@@ -109,12 +142,34 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
+
       return false; // fixme
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      const result = [];
+      // console.log('Board: ', this.attributes)
+      //loop over array of rows
+      for (let r = 0; r < this.attributes.n; r++) {
+        //loop over columns
+        for (let c = 0; c < this.attributes.n; c++) {
+          //have access to coordinance
+          //formula ((r+c+1)*board[r][c])
+              //push this result to result array
+
+          let checkedTile = (r-c+1) * this.attributes[r][c];
+          // console.log('location is: ', this.attributes[r][c])
+          if (checkedTile > 0) result.push(checkedTile);
+        }
+      }
+
+      // [2, 3, 4, 6, 4, 1] => repeat of the 4, therefore true there is a conflict.
+      // console.log('result is: ', result)
+
+      if (result.length < 1) return false;
+      // console.log((result.some((val, i) => result.indexOf(val) !==i)));
+      return (result.some((val, i) => result.indexOf(val) !==i));
     },
 
 
@@ -123,14 +178,50 @@
     // --------------------------------------------------------------
     //
     // test if a specific minor diagonal on this board contains a conflict
-    hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
-    },
+    // hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
+
+      /////////////////////////////
+      //declare result array
+
+      //loop over array of rows
+        //loop over columns
+          //have access to coordinance
+          //formula ((r+c+1)*board[r][c])
+            //if (>0)
+              //push this result to result array
+
+      /////////////////////////////
+    //   return false; // fixme
+    // },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
-    }
+      /////////////////////////////
+      //declare result array
+      const result = [];
+      // console.log('Board: ', this.attributes)
+      //loop over array of rows
+      for (let r = 0; r < this.attributes.n; r++) {
+        //loop over columns
+        for (let c = 0; c < this.attributes.n; c++) {
+          //have access to coordinance
+          //formula ((r+c+1)*board[r][c])
+              //push this result to result array
+
+          let checkedTile = (r+c+1) * this.attributes[r][c];
+          // console.log('location is: ', this.attributes[r][c])
+          if (checkedTile > 0) result.push(checkedTile);
+        }
+      }
+
+      // [2, 3, 4, 6, 4, 1] => repeat of the 4, therefore true there is a conflict.
+      // console.log('result is: ', result)
+
+      if (result.length < 1) return false;
+      // console.log((result.some((val, i) => result.indexOf(val) !==i)));
+      return (result.some((val, i) => result.indexOf(val) !==i));
+      /////////////////////////////
+    },
 
     /*--------------------  End of Helper Functions  ---------------------*/
 

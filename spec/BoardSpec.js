@@ -8,6 +8,8 @@ describe('Board', function() {
       [0, 0, 0, 0]
     ];
     var board = new Board(matrix);
+    // console.log('the board is: ', board);
+    // console.log(board.attributes);
 
     it('should not find a row conflict', function() {
       expect(board.hasAnyRowConflicts()).to.be.equal(false);
